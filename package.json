@@ -1,6 +1,9 @@
 {
   "name": "chatper-2",
   "version": "1.0.0",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
   }
 }
