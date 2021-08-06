@@ -28,7 +28,7 @@ let analog = createClock(AnalogClock, 7, 32);
 
 ///////////////////////////////////////////////////////////////
 
-interface ClockConstructor {
+interface ClockConstructor{
     new (hour: number, minute: number)
 }
 
@@ -189,7 +189,48 @@ function buildName4(firstName = 'will', lastName: string) {
 
 let result5 = buildName4(undefined, 'Adams')
 
+// 나머지 매개변수 (Rest Parameters)
 
+function buildName5(firstName: string, ...restOfName: string[]) {
+    return firstName + ' ' + restOfName.join(' ')
+}
+
+let buildNameFun: (fname: string, ...rest: string[]) => string = buildName5
+
+console.log(buildNameFun('clara', 'kim', 'cha'))
+
+// this와 화살표 함수 (this and arrow functions)
+
+let deck = {
+    suits: ["hearts", "spades", "clubs", "diamonds"],
+    cards: Array(52),
+    createCardPicker: function() {
+        // NOTE: 아랫줄은 화살표 함수로써, 'this'를 이곳에서 캡처할 수 있도록 합니다
+        return () => {
+            let pickedCard = Math.floor(Math.random() * 52);
+            let pickedSuit = Math.floor(pickedCard / 13);
+
+            return {suit: this.suits[pickedSuit], card: pickedCard % 13};
+        }
+    }
+}
+
+let cardPicker = deck.createCardPicker();
+let pickedCard = cardPicker();
+
+alert("card: " + pickedCard.card + " of " + pickedCard.suit);
+
+// this 매개변수 (this parameter)
+
+interface Card {
+    suit: string
+    card: number
+}
+
+interface Deck {
+    suits: string[]
+    cards: number[]
+}
 
 
 
