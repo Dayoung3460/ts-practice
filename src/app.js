@@ -13,154 +13,66 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-function createClock(ctor, hour, minute) {
-    return new ctor(hour, minute);
-}
-var DigitalClock = /** @class */ (function () {
-    function DigitalClock(h, m) {
+var Game = /** @class */ (function () {
+    function Game() {
+        this.pieces = Game.makePieces();
     }
-    DigitalClock.prototype.tick = function () {
-        console.log("beep beep");
+    // static: 클래스 통해 인스턴스 생성할 필요없이, 클래스의 속성 또는 메서드를 사용할 때 사용. 정적 메소드
+    Game.makePieces = function () {
+        return [
+            //Kings
+            new King('White', 'E', 1),
+            new King('Black', 'E', 8),
+            // Queens
+            // new Queen('White', 'D', 1),
+            // new Queen('Black', 'D', 8),
+            // Bishop
+            // new Bishop('White', 'C', 1),
+            // new Bishop('White', 'F', 1),
+            // new Bishop('Black', 'C', 8),
+            // new Bishop('Black', 'F', 8),
+            // ...
+        ];
     };
-    return DigitalClock;
+    return Game;
 }());
-var AnalogClock = /** @class */ (function () {
-    function AnalogClock(h, m) {
+var Position = /** @class */ (function () {
+    function Position(file, rank) {
+        this.file = file;
+        this.rank = rank;
     }
-    AnalogClock.prototype.tick = function () {
-        console.log("tick tock");
-    };
-    return AnalogClock;
-}());
-var digital = createClock(DigitalClock, 12, 17);
-var analog = createClock(AnalogClock, 7, 32);
-var Clock = /** @class */ (function () {
-    function Clock(h, m) {
-    }
-    Clock.prototype.tick = function () {
-        console.log('beep beep');
-    };
-    return Clock;
-}());
-var square = {};
-square.color = 'blue';
-square.sideLength = 10;
-var square2 = {};
-square2.color = 'blue';
-square2.penWidth = 5.0;
-square2.sideLength = 10;
-function getCounter() {
-    var counter = (function (start) { });
-    counter.interval = 123;
-    counter.reset = function () {
-    };
-    return counter;
-}
-var c = getCounter();
-c(10);
-c.reset();
-c.interval = 5.0;
-console.log('getCounter(): ', c.interval);
-// 클래스를 확장한 인터페이스 (Interfaces Extending Classes)
-var Control = /** @class */ (function () {
-    function Control() {
-    }
-    return Control;
-}());
-var Button = /** @class */ (function (_super) {
-    __extends(Button, _super);
-    function Button() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Button.prototype.select = function () { };
-    return Button;
-}(Control));
-var TextBox = /** @class */ (function (_super) {
-    __extends(TextBox, _super);
-    function TextBox() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    TextBox.prototype.select = function () { };
-    return TextBox;
-}(Control));
-// 클래스를 확장한 인터페이스는 그 클래스의 하위클래스에서만 사용가능
-// class Image implements SelectableControl {
-//     private state: any = true
-//     select() { }
-// }
-// 함수 (Function)
-function add(x, y) {
-    return x + y;
-}
-var myAdd = function (x, y) {
-    return x + y;
-};
-var z = 100;
-function addToz(x, y) {
-    return x + y + z;
-}
-console.log(addToz(1, 2));
-// 함수의 타이핑 (Typing the function)
-function add2(x, y) {
-    return x + y;
-}
-var myAdd2 = function (x, y) {
-    return x + y;
-};
-var myAdd3 = function (x, y) { return x + y; };
-// 타입의 추론 (Inferring the types)
-var myAdd4 = function (x, y) { return x + y; };
-// "contextual typing"
-var myAdd5 = function (x, y) { return x + y; };
-// 선택적 매개변수와 기본 매개변수 (Optional and Default Parameter)
-function buildName(firstName, lastName) {
-    return firstName + ' ' + lastName;
-}
-var result1 = buildName('Bob', 'adams');
-function buildName2(firstName, lastName) {
-    if (lastName) {
-        return firstName + ' ' + lastName;
-    }
-    else {
-        return firstName;
-    }
-}
-function buildName3(firstName, lastName) {
-    if (lastName === void 0) { lastName = 'smith'; }
-    return firstName + ' ' + lastName;
-}
-var result2 = buildName3('Bob');
-var result3 = buildName3('Bob', undefined);
-var result4 = buildName3('Bob', 'Adams');
-function buildName4(firstName, lastName) {
-    if (firstName === void 0) { firstName = 'will'; }
-    return firstName + ' ' + lastName;
-}
-var result5 = buildName4(undefined, 'Adams');
-// 나머지 매개변수 (Rest Parameters)
-function buildName5(firstName) {
-    var restOfName = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        restOfName[_i - 1] = arguments[_i];
-    }
-    return firstName + ' ' + restOfName.join(' ');
-}
-var buildNameFun = buildName5;
-console.log(buildNameFun('clara', 'kim', 'cha'));
-// this와 화살표 함수 (this and arrow functions)
-var deck = {
-    suits: ["hearts", "spades", "clubs", "diamonds"],
-    cards: Array(52),
-    createCardPicker: function () {
-        var _this = this;
-        // NOTE: 아랫줄은 화살표 함수로써, 'this'를 이곳에서 캡처할 수 있도록 합니다
-        return function () {
-            var pickedCard = Math.floor(Math.random() * 52);
-            var pickedSuit = Math.floor(pickedCard / 13);
-            return { suit: _this.suits[pickedSuit], card: pickedCard % 13 };
+    Position.prototype.distanceFrom = function (position) {
+        return {
+            rank: Math.abs(position.rank = this.rank),
+            file: Math.abs(position.file.charCodeAt(0) - this.file.charCodeAt(0))
         };
+    };
+    return Position;
+}());
+// 추상클래스의 인스턴스는 생성할 수 x, 메서드를 추상 클래스에 추가는 가능
+var Piece = /** @class */ (function () {
+    function Piece(color, file, rank) {
+        this.color = color;
+        this.position = new Position(file, rank);
     }
-};
-var cardPicker = deck.createCardPicker();
-var pickedCard = cardPicker();
-alert("card: " + pickedCard.card + " of " + pickedCard.suit);
+    Piece.prototype.moveTo = function (position) {
+        this.position = position;
+    };
+    return Piece;
+}());
+var King = /** @class */ (function (_super) {
+    __extends(King, _super);
+    function King() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    King.prototype.canMoveTo = function (position) {
+        var distance = this.position.distanceFrom(position);
+        return distance.rank < 2 && distance.file < 2;
+    };
+    return King;
+}(Piece));
+// class Queen extends Piece{}
+// class Bishop extends Piece{}
+// class Knight extends Piece{}
+// class Rook extends Piece{}
+// class Pawn extends Piece{}

@@ -1,238 +1,72 @@
-// 클래스의 스태틱과 인스턴스의 차이점 (Difference between the static and instance sides of classes)
-interface ClockConstructor {
-    new (hour: number, minute: number): ClockInterface;
-}
-interface ClockInterface {
-    tick(): void;
-}
+type Color = 'Black' | 'White'
+type File_ = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H'
+type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
-function createClock(ctor: ClockConstructor, hour: number, minute: number): ClockInterface {
-    return new ctor(hour, minute);
-}
 
-class DigitalClock implements ClockInterface {
-    constructor(h: number, m: number) { }
-    tick() {
-        console.log("beep beep");
-    }
-}
-class AnalogClock implements ClockInterface {
-    constructor(h: number, m: number) { }
-    tick() {
-        console.log("tick tock");
-    }
-}
+class Game{
+    private pieces = Game.makePieces()
+    // static: 클래스 통해 인스턴스 생성할 필요없이, 클래스의 속성 또는 메서드를 사용할 때 사용. 정적 메소드
+    private static makePieces() {
+        return [
+            //Kings
+            new King('White', 'E', 1),
+            new King('Black', 'E', 8),
+            // Queens
+            // new Queen('White', 'D', 1),
+            // new Queen('Black', 'D', 8),
+            // Bishop
+            // new Bishop('White', 'C', 1),
+            // new Bishop('White', 'F', 1),
+            // new Bishop('Black', 'C', 8),
+            // new Bishop('Black', 'F', 8),
+            // ...
 
-let digital = createClock(DigitalClock, 12, 17);
-let analog = createClock(AnalogClock, 7, 32);
-
-///////////////////////////////////////////////////////////////
-
-interface ClockConstructor{
-    new (hour: number, minute: number)
-}
-
-interface ClockInterface {
-    tick()
-}
-
-const Clock: ClockConstructor = class Clock implements ClockInterface {
-    constructor(h: number, m: number) {
-    }
-    tick() {
-        console.log('beep beep')
+        ]
     }
 }
 
-// 인터페이스 확장하기 (Extending Interfaces)
-
-interface Shape {
-    color: string
-}
-
-interface Square extends Shape {
-    sideLength: number
-}
-
-let square = {} as Square
-square.color = 'blue'
-square.sideLength = 10
-
-//////////////////////////////////////////
-
-interface PenStroke {
-    penWidth: number
-}
-
-interface Square extends Shape, PenStroke {
-    sideLength: number
-}
-
-let square2 = {} as Square
-square2.color = 'blue'
-square2.penWidth = 5.0
-square2.sideLength = 10
-
-// 하이브리드 타입 (Hybrid Types)
-
-interface Counter {
-    (start: number): string
-    interval: number
-    reset(): void
-}
-
-function getCounter(): Counter {
-    let counter = (function (start: number) { }) as Counter
-    counter.interval = 123
-    counter.reset = function () {
-
+class Position  {
+    constructor(
+        private file: File_,
+        private rank: Rank
+    ) {
     }
-    return counter
-}
 
-let c = getCounter()
-
-c(10)
-c.reset()
-c.interval = 5.0
-
-console.log('getCounter(): ', c.interval)
-
-// 클래스를 확장한 인터페이스 (Interfaces Extending Classes)
-
-class Control {
-    private state: any
-}
-
-interface SelectableControl extends Control {
-    select(): void
-}
-
-class Button extends Control implements SelectableControl {
-    select() { }
-}
-
-class TextBox extends Control {
-    select() { }
-}
-
-// 클래스를 확장한 인터페이스는 그 클래스의 하위클래스에서만 사용가능
-
-// class Image implements SelectableControl {
-//     private state: any = true
-//     select() { }
-// }
-
-// 함수 (Function)
-
-function add(x, y) {
-    return x + y
-}
-
-let myAdd = function(x, y) {
-    return x + y
-}
-
-let z = 100
-function addToz(x, y) {
-    return x + y + z
-}
-
-console.log(addToz(1, 2))
-
-// 함수의 타이핑 (Typing the function)
-
-function add2(x: number, y: number): number {
-    return x + y
-}
-let myAdd2 = function(x: number, y: number): number {
-    return x + y
-}
-
-let myAdd3: (x: number, y: number) => number =
-    function(x: number, y: number) { return x + y }
-
-// 타입의 추론 (Inferring the types)
-
-let myAdd4 = function(x: number, y: number): number { return x + y }
-// "contextual typing"
-let myAdd5: (baseValue: number, increment: number) => number =
-    function(x, y) { return x + y }
-
-// 선택적 매개변수와 기본 매개변수 (Optional and Default Parameter)
-
-function buildName(firstName: string, lastName: string) {
-    return firstName + ' ' + lastName
-}
-
-let result1 = buildName('Bob', 'adams')
-
-function buildName2(firstName: string, lastName?: string) {
-    if(lastName) {
-        return firstName + ' ' + lastName
-    } else {
-        return firstName
-    }
-}
-
-function buildName3(firstName: string, lastName = 'smith') {
-    return firstName + ' ' + lastName
-}
-
-let result2 = buildName3('Bob')
-let result3 = buildName3('Bob', undefined)
-let result4 = buildName3('Bob', 'Adams')
-
-function buildName4(firstName = 'will', lastName: string) {
-    return firstName + ' ' + lastName
-}
-
-let result5 = buildName4(undefined, 'Adams')
-
-// 나머지 매개변수 (Rest Parameters)
-
-function buildName5(firstName: string, ...restOfName: string[]) {
-    return firstName + ' ' + restOfName.join(' ')
-}
-
-let buildNameFun: (fname: string, ...rest: string[]) => string = buildName5
-
-console.log(buildNameFun('clara', 'kim', 'cha'))
-
-// this와 화살표 함수 (this and arrow functions)
-
-let deck = {
-    suits: ["hearts", "spades", "clubs", "diamonds"],
-    cards: Array(52),
-    createCardPicker: function() {
-        // NOTE: 아랫줄은 화살표 함수로써, 'this'를 이곳에서 캡처할 수 있도록 합니다
-        return () => {
-            let pickedCard = Math.floor(Math.random() * 52);
-            let pickedSuit = Math.floor(pickedCard / 13);
-
-            return {suit: this.suits[pickedSuit], card: pickedCard % 13};
+    distanceFrom(position: Position) {
+        return {
+            rank: Math.abs(position.rank = this.rank),
+            file: Math.abs(position.file.charCodeAt(0) - this.file.charCodeAt(0))
         }
     }
 }
+ // 추상클래스의 인스턴스는 생성할 수 x, 메서드를 추상 클래스에 추가는 가능
+abstract class Piece {
+    protected position: Position
+    constructor(
+        private readonly color: Color,
+        file: File_,
+        rank: Rank
+    ) {
+        this.position = new Position(file, rank)
+    }
 
-let cardPicker = deck.createCardPicker();
-let pickedCard = cardPicker();
-
-alert("card: " + pickedCard.card + " of " + pickedCard.suit);
-
-// this 매개변수 (this parameter)
-
-interface Card {
-    suit: string
-    card: number
+    moveTo(position: Position) {
+        this.position = position
+    }
+    abstract canMoveTo(position: Position): boolean
 }
 
-interface Deck {
-    suits: string[]
-    cards: number[]
+class King extends Piece{
+    canMoveTo(position: Position): boolean {
+        let distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
+    }
 }
-
-
+// class Queen extends Piece{}
+// class Bishop extends Piece{}
+// class Knight extends Piece{}
+// class Rook extends Piece{}
+// class Pawn extends Piece{}
 
 
 
