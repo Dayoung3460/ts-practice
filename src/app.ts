@@ -1,28 +1,45 @@
+interface Animal {
+    readonly name: string
+    eat(food: string): void
+    sleep(hours: number): void
+}
 
-class Set_ {
-    has(value: number): boolean {
-        //
+interface Feline {
+    meow(): void
+}
+
+class Cat implements Animal, Feline {
+    name = 'Whiskers'
+    eat(food: string) {
+        console.info("Ate some", food, '. Mmm!')
     }
-
-    // this = Set_의 인스턴스 / Set_을 안쓰고 this 사용하는 이유: 자식클래스에서 add 메소드의 리턴 타입 때문에 오버라이딩할 필요 없기 때문
-    add(value: number): this {
-        //
+    sleep(hours: number) {
+        console.info('Slept for', hours, 'hours')
+    }
+    meow() {
+        console.info('Meow')
     }
 }
 
-class MutableSet extends Set_ {
-    delete(value: number): boolean {
-        //
-    }
+class Zebra {
+    trot() {
 
-    // this = MutableSet의 인스턴스
-    // add(value: number): this {
-        //
-    // }
+    }
 }
 
-let set = new Set_
-set.add(1).add(2).add(3)
-set.has(2)
-set.has(4)
+class Poodle {
+    trot() {
+
+    }
+}
+
+function ambleAround(animal: Zebra) {
+    animal.trot()
+}
+
+let zebra = new Zebra
+let poodle = new Poodle
+
+ambleAround(zebra)
+ambleAround(poodle)
 
