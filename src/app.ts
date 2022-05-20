@@ -145,4 +145,17 @@ let DecoratedAPIPayload = serializable(APIPayload)
 let payload = new DecoratedAPIPayload
 console.log(payload.serialize())
 
+//-------------------------------------------------
+
+class MessageQueue {
+    // if constructor is declared as private, instance can not be created by 'new' and the class can not be extended as well
+    private constructor(private message: string[]) {}
+    static create(messages: string[]) {
+        return new MessageQueue(messages)
+    }
+}
+
+MessageQueue.create([])
+//-------------------------------------------
+
 

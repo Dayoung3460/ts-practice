@@ -150,3 +150,16 @@ function serializable(Constructor) {
 var DecoratedAPIPayload = serializable(APIPayload);
 var payload = new DecoratedAPIPayload;
 console.log(payload.serialize());
+//-------------------------------------------------
+var MessageQueue = /** @class */ (function () {
+    // if constructor is declared as private, instance can not be created by 'new' and the class can not be extended as well
+    function MessageQueue(message) {
+        this.message = message;
+    }
+    MessageQueue.create = function (messages) {
+        return new MessageQueue(messages);
+    };
+    return MessageQueue;
+}());
+MessageQueue.create([]);
+//-------------------------------------------
