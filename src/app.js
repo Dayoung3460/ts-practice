@@ -13,66 +13,137 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Game = /** @class */ (function () {
-    function Game() {
-        this.pieces = Game.makePieces();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var Cat = /** @class */ (function () {
+    function Cat() {
+        this.name = 'Whiskers';
     }
-    // static: 클래스 통해 인스턴스 생성할 필요없이, 클래스의 속성 또는 메서드를 사용할 때 사용. 정적 메소드
-    Game.makePieces = function () {
-        return [
-            //Kings
-            new King('White', 'E', 1),
-            new King('Black', 'E', 8),
-            // Queens
-            // new Queen('White', 'D', 1),
-            // new Queen('Black', 'D', 8),
-            // Bishop
-            // new Bishop('White', 'C', 1),
-            // new Bishop('White', 'F', 1),
-            // new Bishop('Black', 'C', 8),
-            // new Bishop('Black', 'F', 8),
-            // ...
-        ];
+    Cat.prototype.eat = function (food) {
+        console.info("Ate some", food, '. Mmm!');
     };
-    return Game;
+    Cat.prototype.sleep = function (hours) {
+        console.info('Slept for', hours, 'hours');
+    };
+    Cat.prototype.meow = function () {
+        console.info('Meow');
+    };
+    return Cat;
 }());
-var Position = /** @class */ (function () {
-    function Position(file, rank) {
-        this.file = file;
-        this.rank = rank;
+// -------------------------------------------------------------
+var Zebra = /** @class */ (function () {
+    function Zebra() {
     }
-    Position.prototype.distanceFrom = function (position) {
-        return {
-            rank: Math.abs(position.rank = this.rank),
-            file: Math.abs(position.file.charCodeAt(0) - this.file.charCodeAt(0))
-        };
+    Zebra.prototype.trot = function () {
     };
-    return Position;
+    return Zebra;
 }());
-// 추상클래스의 인스턴스는 생성할 수 x, 메서드를 추상 클래스에 추가는 가능
-var Piece = /** @class */ (function () {
-    function Piece(color, file, rank) {
-        this.color = color;
-        this.position = new Position(file, rank);
+var Poodle = /** @class */ (function () {
+    function Poodle() {
     }
-    Piece.prototype.moveTo = function (position) {
-        this.position = position;
+    Poodle.prototype.trot = function () {
     };
-    return Piece;
+    return Poodle;
 }());
-var King = /** @class */ (function (_super) {
-    __extends(King, _super);
-    function King() {
+function ambleAround(animal) {
+    animal.trot();
+}
+var zebra = new Zebra;
+var poodle = new Poodle;
+ambleAround(zebra);
+ambleAround(poodle);
+//-----------------------------------------------------------
+var A = /** @class */ (function () {
+    function A() {
+        this.x = 1;
+    }
+    return A;
+}());
+var B = /** @class */ (function (_super) {
+    __extends(B, _super);
+    function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    King.prototype.canMoveTo = function (position) {
-        var distance = this.position.distanceFrom(position);
-        return distance.rank < 2 && distance.file < 2;
+    return B;
+}(A));
+function f(a) { }
+f(new A);
+f(new B);
+var StringDatabase = /** @class */ (function () {
+    function StringDatabase() {
+        this.state = {};
+    }
+    StringDatabase.prototype.get = function (key) {
+        return key in this.state ? this.state[key] : null;
     };
-    return King;
-}(Piece));
-// class Queen extends Piece{}
-// class Bishop extends Piece{}
-// class Knight extends Piece{}
-// class Rook extends Piece{}
-// class Pawn extends Piece{}
+    StringDatabase.prototype.set = function (key, value) {
+        this.state[key] = value;
+    };
+    StringDatabase.from = function (state) {
+        var db = new StringDatabase;
+        for (var key in state) {
+            db.set(key, state[key]);
+        }
+        return db;
+    };
+    return StringDatabase;
+}());
+function withEZDebug(Class) {
+    return /** @class */ (function (_super) {
+        __extends(class_1, _super);
+        function class_1() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        class_1.prototype.debug = function () {
+            var Name = this.constructor.name;
+            var value = this.getDebugValue();
+            return Name + '(' + JSON.stringify(value) + ')';
+        };
+        return class_1;
+    }(Class));
+}
+var HardToDebugUser = /** @class */ (function () {
+    function HardToDebugUser(id, firstName, lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    HardToDebugUser.prototype.getDebugValue = function () {
+        return {
+            id: this.id,
+            name: this.firstName + ' ' + this.lastName
+        };
+    };
+    return HardToDebugUser;
+}());
+var User = withEZDebug(HardToDebugUser);
+var user = new User(3, 'Emma', 'Gluzman');
+user.debug(); // 'HardToDebugUser({'id': 3, 'name': 'Emma Gluzman'})
+// ------------------------------------------
+var APIPayload = /** @class */ (function () {
+    function APIPayload() {
+    }
+    APIPayload.prototype.getValue = function () {
+        //
+    };
+    APIPayload = __decorate([
+        serializable
+    ], APIPayload);
+    return APIPayload;
+}());
+function serializable(Constructor) {
+    return /** @class */ (function (_super) {
+        __extends(class_2, _super);
+        function class_2() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        class_2.prototype.serialize = function () {
+            return this.getValue().toString();
+        };
+        return class_2;
+    }(Constructor));
+}
