@@ -128,7 +128,6 @@ var APIPayload = /** @class */ (function () {
     function APIPayload() {
     }
     APIPayload.prototype.getValue = function () {
-        console.log(11111);
     };
     APIPayload = __decorate([
         serializable
@@ -149,7 +148,7 @@ function serializable(Constructor) {
 }
 var DecoratedAPIPayload = serializable(APIPayload);
 var payload = new DecoratedAPIPayload;
-console.log(payload.serialize());
+payload.serialize();
 //-------------------------------------------------
 var MessageQueue = /** @class */ (function () {
     // if constructor is declared as private, instance can not be created by 'new' and the class can not be extended as well
@@ -162,4 +161,32 @@ var MessageQueue = /** @class */ (function () {
     return MessageQueue;
 }());
 MessageQueue.create([]);
-//-------------------------------------------
+var BalletFlat = /** @class */ (function () {
+    function BalletFlat() {
+        this.purpose = 'dancing';
+    }
+    return BalletFlat;
+}());
+var Boot = /** @class */ (function () {
+    function Boot() {
+        this.purpose = 'woodcutting';
+    }
+    return Boot;
+}());
+var Sneaker = /** @class */ (function () {
+    function Sneaker() {
+        this.purpose = 'walking';
+    }
+    return Sneaker;
+}());
+var Shoe = {
+    // union type: like js 'or' operator(||)
+    create: function (type) {
+        switch (type) {
+            case 'balletFlat': return new BalletFlat;
+            case 'boot': return new Boot;
+            case 'sneaker': return new Sneaker;
+        }
+    }
+};
+Shoe.create('boot');

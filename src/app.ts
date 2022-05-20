@@ -124,7 +124,6 @@ user.debug() // 'HardToDebugUser({'id': 3, 'name': 'Emma Gluzman'})
 @serializable
 class APIPayload {
     getValue(): Payload {
-        console.log(11111)
     }
 }
 
@@ -143,7 +142,7 @@ function serializable<
 
 let DecoratedAPIPayload = serializable(APIPayload)
 let payload = new DecoratedAPIPayload
-console.log(payload.serialize())
+payload.serialize()
 
 //-------------------------------------------------
 
@@ -157,5 +156,37 @@ class MessageQueue {
 
 MessageQueue.create([])
 //-------------------------------------------
+//design pattern
+//factory pattern
+
+// shoe factory
+type Shoe = {
+    purpose: string
+}
+
+class BalletFlat implements Shoe {
+    purpose = 'dancing'
+}
+
+class Boot implements Shoe {
+    purpose = 'woodcutting'
+}
+
+class Sneaker implements Shoe {
+    purpose = 'walking'
+}
+
+let Shoe = {
+    // union type: like js 'or' operator(||)
+    create(type: 'balletFlat' | 'boot' | 'sneaker'): Shoe {
+        switch (type) {
+            case 'balletFlat': return new BalletFlat
+            case 'boot': return new Boot
+            case 'sneaker': return new Sneaker
+        }
+    }
+}
+
+Shoe.create('boot')
 
 
