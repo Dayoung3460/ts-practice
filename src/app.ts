@@ -124,7 +124,7 @@ user.debug() // 'HardToDebugUser({'id': 3, 'name': 'Emma Gluzman'})
 @serializable
 class APIPayload {
     getValue(): Payload {
-        //
+        console.log(11111)
     }
 }
 
@@ -136,8 +136,13 @@ function serializable<
 >(Constructor: T) {
     return class extends Constructor {
         serialize() {
-            return this.getValue().toString()
+            return this.getValue()
         }
     }
 }
+
+let DecoratedAPIPayload = serializable(APIPayload)
+let payload = new DecoratedAPIPayload
+console.log(payload.serialize())
+
 

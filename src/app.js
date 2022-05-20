@@ -128,7 +128,7 @@ var APIPayload = /** @class */ (function () {
     function APIPayload() {
     }
     APIPayload.prototype.getValue = function () {
-        //
+        console.log(11111);
     };
     APIPayload = __decorate([
         serializable
@@ -142,8 +142,11 @@ function serializable(Constructor) {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         class_2.prototype.serialize = function () {
-            return this.getValue().toString();
+            return this.getValue();
         };
         return class_2;
     }(Constructor));
 }
+var DecoratedAPIPayload = serializable(APIPayload);
+var payload = new DecoratedAPIPayload;
+console.log(payload.serialize());
